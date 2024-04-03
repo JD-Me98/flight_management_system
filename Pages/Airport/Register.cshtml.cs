@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
-using static flight_management_system.Pages.Aircraft.IndexModel;
 
-namespace flight_management_system.Pages.Aircraft
+namespace flight_management_system.Pages.Airport
 {
     public class RegisterModel : PageModel
     {
         private readonly IConfiguration _configuration;
-        public Aircrafts aircraftInfo = new Aircrafts();
+        public Airports airportInfo = new Airports();
         public String errorMessage = "";
         public String successMessage = "";
 
@@ -19,12 +18,14 @@ namespace flight_management_system.Pages.Aircraft
         public void OnGet()
         {
         }
-        public void OnPost() {
-            aircraftInfo.Id = Request.Form["id"];
-            aircraftInfo.Type = Request.Form["type"];
-            aircraftInfo.Capacity = int.Parse(Request.Form["capacity"]);
 
-            if(aircraftInfo.Id.Length == 0 || aircraftInfo.Type.Length == 0 || aircraftInfo.Capacity.Equals(null))
+        public void OnPost()
+        {
+            airportInfo.Id = Request.Form["id"];
+            airportInfo.Name = Request.Form["name"];
+            airportInfo.Location = Request.Form["location"];
+
+            if (airportInfo.Id.Length == 0 || airportInfo.Name.Length == 0 || airportInfo.Location.Equals(null))
             {
                 errorMessage = "All fields are required!";
                 return;
@@ -36,13 +37,13 @@ namespace flight_management_system.Pages.Aircraft
                 using (SqlConnection con = new SqlConnection(conString))
                 {
                     con.Open();
-                    string sqlQuery = "INSERT INTO aircraft values(@id, @type, @capacity)";
+                    string sqlQuery = "INSERT INTO airport values(@id, @name, @location)";
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                     {
-                        Aircrafts aircraft = new Aircrafts();
-                        cmd.Parameters.AddWithValue("@id", aircraftInfo.Id);
-                        cmd.Parameters.AddWithValue("@type", aircraftInfo.Type);
-                        cmd.Parameters.AddWithValue("@capacity", aircraftInfo.Capacity);
+                        Airports airport = new Airports();
+                        cmd.Parameters.AddWithValue("@id", airportInfo.Id);
+                        cmd.Parameters.AddWithValue("@name", airportInfo.Name);
+                        cmd.Parameters.AddWithValue("@location", airportInfo.Location);
 
                         cmd.ExecuteNonQuery();
                     }
@@ -54,14 +55,15 @@ namespace flight_management_system.Pages.Aircraft
                 errorMessage = ex.Message;
                 return;
             }
-            aircraftInfo.Id = ""; aircraftInfo.Capacity = 0; aircraftInfo.Type = "";
-            successMessage = "New Aircraft Registered";
+            airportInfo.Id = ""; airportInfo.Location = ""; airportInfo.Name = "";
+            successMessage = "New Airport Registered";
         }
-        public class Aircrafts
+
+        public class Airports
         {
             public string Id { get; set; }
-            public string Type { get; set; }
-            public int Capacity { get; set; }
+            public string Name { get; set; }
+            public string Location { get; set; }
         }
     }
 }
