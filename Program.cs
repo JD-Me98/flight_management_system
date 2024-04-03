@@ -23,6 +23,3 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
-//yes
-//no
-//maybe

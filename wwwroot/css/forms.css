@@ -40,7 +40,7 @@ button[type="submit"] {
     font-size: 16px;
 }
 
-button[type="submit"]:hover {
-    background-color:#ba9500;
-    color: #000;
-}
+    button[type="submit"]:hover {
+        background-color: #ba9500;
+        color: #000;
+    }

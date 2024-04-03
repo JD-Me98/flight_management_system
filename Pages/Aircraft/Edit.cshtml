@@ -1,0 +1,40 @@
+﻿@page
+@model flight_management_system.Pages.Aircraft.EditModel
+@{
+}
+<div class="page-section">
+    <div class="form-container">
+        @if (Model.errorMessage.Length > 0)
+        {
+            <div id="Message" class="errorMessage">
+                <p><strong>Error:</strong> @Model.errorMessage</p>
+                <span class="close-btn" onclick="dismissError()">×</span>
+            </div>
+        }
+        <form method="post">
+            <h2 class="poppins-regular">Update Aircraft</h2>
+            <div class="form-group">
+                <label>Aircraft Id:</label>
+                <input type="hidden" name="id" value="@Model.aircraftInfo.Id" />
+            </div>
+            <div class="form-group">
+                <label>Aircraft Type:</label>
+                <input type="text" name="type" value="@Model.aircraftInfo.Type" />
+            </div>
+            <div class="form-group">
+                <label>Aircraft Capacity:</label>
+                <input type="text" name="capacity" value="@Model.aircraftInfo.Capacity" />
+            </div>
+            @if (Model.successMessage.Length > 0)
+            {
+                <div id="Message" class="successMessage">
+                    <p>@Model.successMessage</p>
+                    <span class="close-btn" onclick="dismissError()">×</span>
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
