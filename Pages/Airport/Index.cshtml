@@ -1,0 +1,36 @@
+﻿@page
+@model flight_management_system.Pages.Airport.IndexModel
+@{
+}
+
+<div class="head-img">
+    <img src="https://images.pexels.com/photos/1089306/pexels-photo-1089306.jpeg?auto=compress&cs=tinysrgb&w=600" />
+</div>
+<div class="content-left">    
+    <a class="button-style" href="/Airport/Register"> + Register airports</a>
+    <h2 class="color-white">List of airports</h2>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Airport Id</th>
+                <th>Airport Name</th>
+                <th>Airport Location</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model.listAirports)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Location</td>
+                    <td>
+                        <a class="edit-btn" href="/Airport/Edit?id=@item.Id">Edit</a>
+                        <a class="delete-btn" href="/Airport/Delete?id=@item.Id" onclick="return confirm('Are you sure you want to delete this airport?')">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
