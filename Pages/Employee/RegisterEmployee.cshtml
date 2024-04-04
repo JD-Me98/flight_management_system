@@ -1,0 +1,48 @@
+﻿@page
+@model flight_management_system.Pages.Employee.RegisterEmployeeModel
+@{
+}
+<div class="page-section">
+    <div class="form-container">
+        @if (Model.errorMessage.Length > 0)
+        {
+            <div id="Message" class="errorMessage">
+                <p><strong>Error:</strong> @Model.errorMessage</p>
+                <span class="close-btn" onclick="dismissError()">×</span>
+            </div>
+        }
+        <form method="post">
+            <h2 class="poppins-regular">Register Employee</h2>
+            <div class="form-group">
+                <label>Employee Id:</label>
+                <input type="text" name="id" value="@Model.employeeInfo.Id" />
+            </div>
+            <div class="form-group">
+                <label>Employee Fullnames:</label>
+                <input type="text" name="fullname" value="@Model.employeeInfo.Fullname" />
+            </div>
+            <div class="form-group">
+                <label>Employee Date of Birth:</label>
+                <input type="text" name="dateOfBirth" value="@Model.employeeInfo.DateOfBirth" />
+            </div>
+            <div class="form-group">
+                <label>Employee Position:</label>
+                <input type="text" name="position" value="@Model.employeeInfo.Position" />
+            </div>
+            <div class="form-group">
+                <label>Employee Availability:</label>
+                <input type="text" name="availability" value="@Model.employeeInfo.Availability" />
+            </div>
+            @if (Model.successMessage.Length > 0)
+            {
+                <div id="Message" class="successMessage">
+                    <p>@Model.successMessage</p>
+                    <span class="close-btn" onclick="dismissError()">×</span>
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
