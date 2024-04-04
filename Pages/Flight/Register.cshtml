@@ -1,0 +1,67 @@
+﻿@page
+@model flight_management_system.Pages.Flight.RegisterModel
+@{
+}
+<div class="page-section">
+    <div class="form-container">
+        @if (Model.errorMessage.Length > 0)
+        {
+            <div id="Message" class="errorMessage">
+                <p><strong>Error:</strong> @Model.errorMessage</p>
+                <span class="close-btn" onclick="dismissError()">×</span>
+            </div>
+        }
+        <form method="post">
+            <h2 class="poppins-regular">Register Aircraft</h2>
+            <div class="form-group">
+                <label>Flight Id:</label>
+                <input type="text" name="id" value="@Model.flightInfo.Id" />
+            </div>
+            <div class="form-group">
+                <label>Departure Time:</label>
+                <input type="datetime" name="departure" value="@Model.flightInfo.Departure" />
+            </div>
+            <div class="form-group">
+                <label>Arrival Time:</label>
+                <input type="datetime" name="arrival" value="@Model.flightInfo.Arrival" />
+            </div>
+            <div class="form-group">
+                <label>Origin:</label>
+                <select name="origin" value="@Model.flightInfo.Origin">
+                    @foreach (var item in Model.listAirports)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Destination:</label>
+                <select name="destination" value="@Model.flightInfo.Destination">
+                    @foreach(var item in Model.listAirports)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Air Craft:</label>
+                <select name="aircraft" value="@Model.flightInfo.Aircraft">
+                    @foreach (var item in Model.listAircrafts)
+                    {
+                        <option value="@item.Id">@item.Type</option>
+                    }
+                </select>
+            </div>
+            @if (Model.successMessage.Length > 0)
+            {
+                <div id="Message" class="successMessage">
+                    <p>@Model.successMessage</p>
+                    <span class="close-btn" onclick="dismissError()">×</span>
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
