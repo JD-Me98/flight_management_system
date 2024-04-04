@@ -1,0 +1,41 @@
+﻿@page
+@model flight_management_system.Pages.Agents.EditModel
+@{
+}
+<div class="page-section">
+    <div class="form-container">
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div id="Message" class="errorMessage">
+                <p><strong>Error:</strong> @Model.ErrorMessage</p>
+                <span class="close-btn" onclick="dismissError()">×</span>
+            </div>
+        }
+        <form method="post">
+            <h2 class="poppins-regular">Update Agent</h2>
+            <div class="form-group">
+                <label>Agent Id:</label>
+                <input type="hidden" name="id" value="@Model.AgentInfo.Id" />
+            </div>
+            <div class="form-group">
+                <label>Name:</label>
+                <input type="text" name="agency" value="@Model.AgentInfo.Agency" />
+            </div>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="username" value="@Model.AgentInfo.Username" />
+            </div>
+            @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+            {
+                <div id="Message" class="successMessage">
+                    <p>@Model.SuccessMessage</p>
+                    <span class="close-btn" onclick="dismissSuccessMessage()">×</span>
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
