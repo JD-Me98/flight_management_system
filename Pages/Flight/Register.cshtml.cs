@@ -1,4 +1,5 @@
 using flight_management_system.Pages.Airport;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -6,6 +7,7 @@ using Microsoft.Identity.Client;
 
 namespace flight_management_system.Pages.Flight
 {
+    [Authorize]
     public class RegisterModel : PageModel
     {
         private readonly IConfiguration _configuration;
