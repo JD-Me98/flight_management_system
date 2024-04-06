@@ -12,7 +12,7 @@
         using (SqlConnection con = new SqlConnection(conString))
         {
             con.Open();
-            string sqlQuery = "DELETE FROM airport WHERE id=@id";
+            string sqlQuery = "DELETE FROM agency WHERE id=@id";
             using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
             {
                 cmd.Parameters.AddWithValue("@id", id);
@@ -26,5 +26,5 @@
     {
         Console.WriteLine("Error: " + ex.Message);
     }
-    Response.Redirect("/Airport/Index");
+    Response.Redirect("/Agency/Index");
 }
