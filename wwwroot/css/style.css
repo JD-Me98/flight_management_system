@@ -206,3 +206,16 @@ table {
 .delete-btn{
     color:#f54d4d;
 }
+
+.auth-btn{
+    background-color: #FFCB00;
+    padding:5px;
+    border-radius:5px;
+    right:20px;
+    position: absolute;
+    text-decoration:none;
+    color:#000;
+}
+    .auth-btn:hover {
+       background-color: #ba9500;
+    }

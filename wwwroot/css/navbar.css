@@ -3,6 +3,8 @@
     background-color: #333;
     color: white;
     padding: 10px 0;
+    min-height:50px;
+    position: relative;
 }
 
     .navbar .container {

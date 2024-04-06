@@ -27,22 +27,33 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/">Home</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                    {
                         <li class="nav-item">
                             <a class="nav-link" href="/Airport/Index">Airport</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Aircraft/Index">Aircraft</a>
                         </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Employee/IndexEmployee">Employee</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Employee/IndexEmployee">Employee</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/Flight/Index">Flight</a>
                         </li>
-                        <li class="nav-item">
+                    }
+                    <li class="nav-item">
                             <a class="nav-link" href="/">Contact</a>
                         </li>
                     </ul>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="auth-btn" href="/Account/Logout">Logout</a>
+                }
+                else
+                {
+                    <a class="auth-btn" href="/Account/Login">Login</a>
+                 }
                 </div>
             </nav>
         </header>

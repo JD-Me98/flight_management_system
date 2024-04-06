@@ -19,6 +19,7 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="datetime"],
+input[type="password"],
 select,
 textarea {
     width: 100%;
