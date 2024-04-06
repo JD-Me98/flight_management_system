@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -5,6 +6,7 @@ using static flight_management_system.Pages.Aircraft.IndexModel;
 
 namespace flight_management_system.Pages.Aircraft
 {
+    [Authorize]
     public class RegisterModel : PageModel
     {
         private readonly IConfiguration _configuration;

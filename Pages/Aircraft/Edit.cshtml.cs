@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -6,6 +7,7 @@ using System;
 
 namespace flight_management_system.Pages.Aircraft
 {
+    [Authorize]
     public class EditModel : PageModel
     {
         private readonly IConfiguration _configuration;
