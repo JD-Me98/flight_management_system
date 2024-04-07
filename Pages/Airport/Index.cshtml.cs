@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
+using System.Xml;
 
 namespace flight_management_system.Pages.Airport
 {
@@ -24,7 +25,7 @@ namespace flight_management_system.Pages.Airport
                 using (SqlConnection con = new SqlConnection(conString))
                 {
                     con.Open();
-                    string sqlQuery = "SELECT Id, Name, Location FROM airport;";
+                    string sqlQuery = "SELECT Id, Name, Location, image FROM airport;";
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                     {
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -35,7 +36,8 @@ namespace flight_management_system.Pages.Airport
                                 {
                                     Id = reader.GetString(reader.GetOrdinal("Id")),
                                     Name = reader.GetString(reader.GetOrdinal("Name")),
-                                    Location = reader.GetString(reader.GetOrdinal("Location"))
+                                    Location = reader.GetString(reader.GetOrdinal("Location")),
+                                    Image = reader.GetString(reader.GetOrdinal("Image"))
                                 };
                                 listAirports.Add(airport);
                             }
@@ -53,6 +55,7 @@ namespace flight_management_system.Pages.Airport
             public string Id { get; set; }
             public string Name { get; set; }
             public string Location { get; set; }
+            public string Image { get; set; }
         }
     }
 }
