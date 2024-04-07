@@ -2,3 +2,56 @@
 @model flight_management_system.Pages.Account.SignupModel
 @{
 }
+<div class="page-section">
+    <div class="form-container">
+        @if (Model.errorMessage.Length > 0)
+        {
+            <div id="Message" class="errorMessage">
+                <p><strong>Error:</strong> @Model.errorMessage</p>
+                <span class="close-btn" onclick="dismissError()">×</span>
+            </div>
+        }
+        <form method="post">
+            <h2 class="poppins-regular">Login</h2>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="username" value="@Model.accountInfo.username" />
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="text" name="password" value="@Model.accountInfo.password" />
+            </div>
+            <div class="form-group">
+                <label>Confirm password:</label>
+                <input type="text" name="confirmPass" value="@Model.accountInfo.confirmPass" />
+            </div>
+            <div class="form-group">
+                <label>Role:</label>
+                <select name="role" value="@Model.accountInfo.Role">
+                    <option value="system admin">System Admin</option>
+                    <option value="agent">Agent</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Agecny:</label>
+                <select name="agency" value="@Model.accountInfo.Agency">
+                    <option value="" selected>-- Select agency if you are an agent  --</option>
+                    @foreach (var item in Model.listAgencies)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            @if (Model.successMessage.Length > 0)
+            {
+                <div id="Message" class="successMessage">
+                    <p>@Model.successMessage</p>
+                    <span class="close-btn" onclick="dismissError()">×</span>
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit">Signup</button>
+            </div>
+        </form>
+    </div>
+</div>

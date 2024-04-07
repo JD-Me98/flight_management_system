@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace flight_management_system.Pages.Account
 {
@@ -32,8 +34,10 @@ namespace flight_management_system.Pages.Account
                     string sqlQuery = "SELECT username, password, role, agent_id FROM account WHERE username = @username AND password = @password";
                     using(SqlCommand cmd = new SqlCommand(sqlQuery,con))
                     {
+                        string pass = encrytPass(accountInfo.password);
+                        
                         cmd.Parameters.AddWithValue("username", accountInfo.username);
-                        cmd.Parameters.AddWithValue("password", accountInfo.password);
+                        cmd.Parameters.AddWithValue("password", pass);
 
                         cmd.ExecuteNonQuery();
 
@@ -75,7 +79,20 @@ namespace flight_management_system.Pages.Account
                 return Page();
             }
         }
-
+        private String encrytPass(String password)
+        {
+            //Hash computation
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    sb.Append(bytes[i].ToString("x2"));
+                }
+                return sb.ToString();
+            }
+        }
         public class Account
         {
             public string username { get; set; }

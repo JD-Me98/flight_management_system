@@ -1,8 +1,6 @@
 ﻿@page
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @using Microsoft.Data.SqlClient
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize]
 @{
     String id = Request.Query["id"];
     Console.WriteLine(id);

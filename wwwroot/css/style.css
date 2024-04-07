@@ -121,13 +121,19 @@ table {
 }
 
 /* Add zebra striping to the table rows */
+.styled-table tbody tr:nth-child(odd) {
+    background-color: rgba(242, 242, 242, 0.8);
+    backdrop-filter: blur(3px);
+}
+
 .styled-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: rgba(242, 242, 242, 0.7);
+    backdrop-filter: blur(3px);
 }
 
 /* Hover effect on table rows */
 .styled-table tbody tr:hover {
-    background-color: #ddd;
+    background-color: rgba(247, 247, 247, 0.9);
 }
 
 .errorMessage {
@@ -178,11 +184,11 @@ table {
 
 .head-img {
     width: 100%;
-    height: 150px;
+    max-height: 100%;
     overflow: hidden;
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
 }
 .head-img img{
     width: 100%;
