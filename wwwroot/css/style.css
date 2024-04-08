@@ -212,6 +212,9 @@ table {
 .delete-btn{
     color:#f54d4d;
 }
+.book-btn {
+    color: #14781a;
+}
 
 .auth-btn{
     background-color: #FFCB00;
@@ -225,3 +228,20 @@ table {
     .auth-btn:hover {
        background-color: #ba9500;
     }
+
+.flight-search {
+    padding: 20px;
+    width: 100%;
+    background-color: rgba(242, 242, 242, 0.8);
+}
+    .flight-search form {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 20px;
+    }
+.flight-search div{
+     display:flex;
+     flex-direction:column;
+     justify-content:center;
+}
+
