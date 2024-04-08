@@ -1,0 +1,37 @@
+﻿@page
+@model flight_management_system.Pages.FlightCrew.IndexModel
+@{
+}
+<div class="head-img">
+    <img src="https://calaero.edu/wp-content/uploads/2023/08/iStock-1332501286-scaled.jpg" />
+</div>
+<div class="content-left">
+    <a class="button-style" href="/FlightCrew/Register"> + Register FlighCrew</a>
+    <h2 class="color-white">List of Flights</h2>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>FlightCrew Id</th>
+                <th>Employee</th>
+                <th>Flight</th>
+                <th>Role</th>                
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.listFlightCrews)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Employee</td>
+                    <td>@item.Flight</td>
+                    <td>@item.Role</td>                    
+                    <td>
+                        <a class="edit-btn" href="#">Edit</a>
+                        <a class="delete-btn" href="#" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
