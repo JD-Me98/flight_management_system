@@ -1,0 +1,44 @@
+﻿@page
+@model flight_management_system.Pages.Booking.ManageModel
+@{
+}
+<div class="head-img">
+    <img src="https://calaero.edu/wp-content/uploads/2023/08/iStock-1332501286-scaled.jpg" />
+</div>
+<div class="content-left">
+    <a class="button-style" href="/Flight/Register"> + Register flights</a>
+    <h2 class="color-white">List of Flights</h2>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Flight ID</th>
+                <th>FullName</th>
+                <th>Email</th>
+                <th>Flight</th>
+                <th>Class</th>
+                <th>Trip</th>
+                <th>Agency</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.listBookings)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Fullname</td>
+                    <td>@item.Email</td>
+                    <td>@item.Flight</td>
+                    <td>@item.FlightClass</td>
+                    <td>@item.trip</td>
+                    <td>@item.Agency</td>
+                    <td>@item.Created_at</td>
+                    <td>
+                        <a class="edit-btn" href="/Booking/Edit?id=@item.Id">Edit</a>
+                        <a class="delete-btn" href="/Booking/Delete?id=@item.Id" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
