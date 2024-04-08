@@ -74,3 +74,4 @@ ScaffoldingReadMe.txt
 *~.nib
 local.settings.json
 appsettings.json
+wwwroot/uploads/*
