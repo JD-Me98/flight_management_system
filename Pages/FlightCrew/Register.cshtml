@@ -1,0 +1,56 @@
+﻿@page
+@model flight_management_system.Pages.FlightCrew.RegisterModel
+@{
+}
+<div class="page-section">
+    <div class="form-container">
+        @if (Model.errorMessage.Length > 0)
+        {
+            <div id="Message" class="errorMessage">
+                <p><strong>Error:</strong> @Model.errorMessage</p>
+                <span class="close-btn" onclick="dismissError()">×</span>
+            </div>
+        }
+        <form method="post">
+            <h2 class="poppins-regular">Register Flight Crew</h2>
+            <div class="form-group">
+                <label>FlightCrew Id:</label>
+                <input type="text" name="id" value="" />
+            </div>
+            <div class="form-group">
+                <label>Air Craft:</label>
+                <select name="Employee" value="">
+                    @foreach (var item in Model.listEmployee)
+                    {
+                        <option value="@item.Id">@item.Fullname</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Fight:</label>
+                <select name="flight" value="">
+                    @foreach (var item in Model.listFlight)
+                    {
+                        <option value="@item.Id">@item.Id</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Role</label>
+                <input type="text" name="role" value="" />
+            </div>
+
+            @if (Model.successMessage.Length > 0)
+            {
+                <div id="Message" class="successMessage">
+                    <p>@Model.successMessage</p>
+                    <span class="close-btn" onclick="dismissError()">×</span>
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
