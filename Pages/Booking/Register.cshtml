@@ -2,4 +2,75 @@
 @model flight_management_system.Pages.Booking.RegisterModel
 @{
 }
+<div class="page-section">
+    <div class="form-container">
+        @if (Model.errorMessage.Length > 0)
+        {
+            <div id="Message" class="errorMessage">
+                <p><strong>Error:</strong> @Model.errorMessage</p>
+                <span class="close-btn" onclick="dismissError()">×</span>
+            </div>
+        }
+        <form method="post">
+            <h2 class="poppins-regular">Book Flight</h2>
+            <div class="form-group">
+                <label>Full Name:</label>
+                <input type="text" name="fullname" value="@Model.bookingInfo.Fullname" />
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="text" name="email" placeholder="example@email.com" value="@Model.bookingInfo.Email" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="flight" value="@Request.Query["id"]"/>
+            </div>
+            <div class="form-group">
+                <label>Class: </label>
+            <select name="flightclass" value="@Model.bookingInfo.FlightClass">
+                <option value="Economy">Economy</option>
+                <option value="Premium Economy">Premium Economy</option>
+                <option value="Business">Business</option>                
+                <option value="First Class">First Class</option>
+            </select>
+            </div>
+            <div class="form-group">
+                <label>Trip:</label>
+                <label for="round">Round trip</label>
+                <input type="radio" name="trip" id="round" value="Round" />
+                <label for="round">One-way trip</label>
+                <input type="radio" name="trip" id="oneway" value="One-Way" />
+            </div>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("agent"))
+            {
 
+                var agencyClaim = User.FindFirst("agent");
+                string agencyValue = agencyClaim != null ? agencyClaim.Value : "";
+
+                <span> is Authenticated and agency is @agencyValue</span>
+
+                <div class="form-group">
+                    <input type="hidden" name="agency" value="@agencyValue" />
+
+                </div>
+            }
+            else
+            {
+                <span>is not Authenticated</span>
+                <div class="form-group">
+                    <input type="hidden" name="agency" placeholder="For agencies only" value=""/>
+
+                </div>
+            }
+            @if (Model.successMessage.Length > 0)
+            {
+                <div id="Message" class="successMessage">
+                    <p>@Model.successMessage</p>
+                    <span class="close-btn" onclick="dismissError()">×</span>
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit">Book Flight</button>
+            </div>
+        </form>
+    </div>
+</div>
