@@ -36,15 +36,17 @@
             <div class="form-group">
                 <label>Trip:</label>
                 <label for="round">Round trip</label>
-                <input type="radio" name="trip" id="round" value="Round Trip" />
+                <input type="radio" name="trip" id="round" value="Round" />
                 <label for="round">One-way trip</label>
                 <input type="radio" name="trip" id="oneway" value="One-Way" />
             </div>
             @if (User.Identity.IsAuthenticated && User.IsInRole("agent"))
             {
+
                 var agencyClaim = User.FindFirst("agent");
                 string agencyValue = agencyClaim != null ? agencyClaim.Value : "";
 
+                <span> is Authenticated and agency is @agencyValue</span>
 
                 <div class="form-group">
                     <input type="hidden" name="agency" value="@agencyValue" />
@@ -53,6 +55,7 @@
             }
             else
             {
+                <span>is not Authenticated</span>
                 <div class="form-group">
                     <input type="hidden" name="agency" placeholder="For agencies only" value=""/>
 

@@ -58,7 +58,7 @@ namespace flight_management_system.Pages.Booking
             bookingInfo.Flight = Request.Form["flight"];
             bookingInfo.FlightClass = Request.Form["flightclass"];
             bookingInfo.trip = Request.Form["trip"];
-            bookingInfo.Agency = Request.Form["agecny"];
+            bookingInfo.Agency = Request.Form["agency"];
 
             //if (!ModelState.IsValid)
             //{

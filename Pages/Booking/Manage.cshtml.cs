@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace flight_management_system.Pages.Booking
 {
@@ -22,23 +22,42 @@ namespace flight_management_system.Pages.Booking
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
-                string sqlQuery = "SELECT * FROM booking";
+                string sqlQuery = "";
+                if(User.Identity.IsAuthenticated && User.IsInRole("agent"))
+                {
+                    var agencyClaim = User.FindFirst("agent");
+                    string agencyValue = agencyClaim != null ? agencyClaim.Value : "";
+
+                    sqlQuery = "SELECT * FROM booking WHERE agent_id = " + "'"+agencyValue+"'";
+                }
+                else
+                {
+                    sqlQuery = "SELECT * FROM booking";
+                }
                 using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                 {
-                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        listBookings.Clear();
-                        Booking booking = new Booking();
+                        listBookings.Clear();                        
+
                         while (reader.Read())
                         {
-                            booking.Id = reader.GetInt32(0);
-                            booking.Fullname = reader.GetString(1);
-                            booking.Email = reader.GetString(2);
-                            booking.Flight = reader.GetString(3);
-                            booking.FlightClass = reader.GetString(4);
-                            booking.trip = reader.GetString(5);
-                            booking.Agency = reader.GetString(6);
-                            booking.Created_at = DateTime.Parse(reader.GetString(7));
+                            Booking booking = new Booking();
+                            booking.Id = reader.GetInt32(reader.GetOrdinal("id"));
+                            booking.Fullname = reader.GetString(reader.GetOrdinal("fullname"));
+                            booking.Email = reader.GetString(reader.GetOrdinal("email"));
+                            booking.Flight = reader.GetString(reader.GetOrdinal("flight_id"));
+                            booking.FlightClass = reader.GetString(reader.GetOrdinal("class"));
+                            booking.trip = reader.GetString(reader.GetOrdinal("trip"));
+                            if (!reader.IsDBNull(reader.GetOrdinal("agent_id")))
+                            {
+                                booking.Agency = reader.GetString(reader.GetOrdinal("agent_id"));
+                            }
+                            else
+                            {                                
+                                booking.Agency = "No Agency";
+                            }
+                            booking.Created_at = reader.GetDateTime(reader.GetOrdinal("created_at"));
 
                             listBookings.Add(booking);
                         }
@@ -56,7 +75,15 @@ namespace flight_management_system.Pages.Booking
             public string FlightClass { get; set; }
             public string trip { get; set; }
             public string Agency { get; set; }
-            public DateTime Created_at {  get; set; }
+            public DateTime Created_at { get; set; }
         }
+
+        public class Agencies
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+            public string Location { get; set; }
+        }
+
     }
 }
