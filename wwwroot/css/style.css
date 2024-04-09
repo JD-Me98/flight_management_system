@@ -251,6 +251,7 @@ table {
     min-height:150px;
     padding:10px;
     display:flex;
+    gap:5px;
     flex-direction:column;
     border-radius:5px;
     background-color:#fff;
@@ -260,6 +261,7 @@ table {
     height:150px;
     object-fit:cover;
     height:auto;
+    margin-bottom:10px;
 }
 .card-holder{
     width:100%;
@@ -273,4 +275,7 @@ table {
     width:100%;
     text-align:center;
     color:#004eff;
+}
+.subtitle{
+    color:#a5a5a5;
 }

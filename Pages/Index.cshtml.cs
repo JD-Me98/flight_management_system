@@ -27,7 +27,12 @@ namespace flight_management_system.Pages
                 using (SqlConnection con = new SqlConnection(conString))
                 {
                     con.Open();
-                    string sqlQuery = "SELECT A.name, A.image, A.location, F.destination_airport_id, COUNT(*) AS Visits\r\nFROM booking B\r\nJOIN flight F ON B.flight_id = F.id\r\nJOIN airport A ON F.destination_airport_id = A.id\r\nGROUP BY A.name, A.image, A.location, F.destination_airport_id\r\nORDER BY Visits DESC;";
+                    string sqlQuery = "SELECT A.name, A.image, A.location, F.destination_airport_id, COUNT(*) AS Visits " +
+                        "FROM booking B " +
+                        "JOIN flight F ON B.flight_id = F.id " +
+                        "JOIN airport A ON F.destination_airport_id = A.id " +
+                        "GROUP BY A.name, A.image, A.location, F.destination_airport_id " +
+                        "ORDER BY Visits DESC;";
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                     {
                         using (SqlDataReader reader = cmd.ExecuteReader())
