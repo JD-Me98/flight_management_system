@@ -4,15 +4,161 @@
     ViewData["Title"] = "Home page";
 }
 
+<style>
+    .slideshow-container {
+        max-width: 100%;
+        height: 400px;
+        position: relative;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    .mySlides {
+        display: none;
+        transition: opacity 1s ease; /* Smooth transition effect */
+    }
+
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 16px;
+        margin-top: -22px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+    }
+
+    .next {
+        right: 0;
+        border-radius: 3px 0 0 3px;
+    }
+
+    .prev {
+        left: 0;
+        border-radius: 3px 0 0 3px;
+    }
+
+    .prev:hover, .next:hover {
+        background-color: rgba(0,0,0,0.8);
+    }
+
+    .text {
+        color: white;
+        font-size: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .dot {
+        cursor: pointer;
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+
+    .active, .dot:hover {
+        background-color: #717171;
+    }
+
+    .fade {
+        animation-name: fade;
+        animation-duration: 1.5s;
+    }
+
+    
+</style>
+
+<div class="slideshow-container">
+    <div class="mySlides fade">
+        <img src="~/slideshow/1.jpg" style="width:100%">
+        <div class="text">WELCOME TO OUR FLIGHT MANAGEMENT SYSTEM</div>
+    </div>
+    <div class="mySlides fade">
+        <img src="~/slideshow/2.jpg" style="width:100%">
+        <div class="text">You can book yourself a flight</div>
+    </div>
+    <div class="mySlides fade">
+        <img src="~/slideshow/3.jpg" style="width:100%">
+        <div class="text">You can ask an agent to book one</div>
+    </div>
+    <div class="mySlides fade">
+        <img src="~/slideshow/4.jpg" style="width:100%">
+        <div class="text">You can book a flight ANYTIME</div>
+    </div>
+    <div class="mySlides fade">
+        <img src="~/slideshow/5.webp" style="width:100%">
+        <div class="text">You can book a flight ANYWHERE</div>
+    </div>
+
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</div>
+
+<br>
+
+<div style="text-align:center">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+    <span class="dot" onclick="currentSlide(4)"></span>
+    <span class="dot" onclick="currentSlide(5)"></span>
+</div>
+
+<script>
+    var slideIndex = 1;
+    var slideInterval = setInterval(function() { plusSlides(1) }, 4000); // Switch slides every 4 seconds
+
+    function plusSlides(n) {
+        clearInterval(slideInterval); // Clear previous interval
+        slideInterval = setInterval(function() { plusSlides(1) }, 4000); // Reset interval
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        clearInterval(slideInterval); // Clear previous interval
+        slideInterval = setInterval(function() { plusSlides(1) }, 4000); // Reset interval
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("dot");
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+    }
+</script>
+
 <div class="home-title">
     <h1>Checkout Our Top Destinations!</h1>
 </div>
 <div class="card-holder">
-    
-    @foreach(var item in Model.listDestinations)
+    @foreach (var item in Model.listDestinations)
     {
         <div class="img-card">
-            <img src="~/uploads/@item.image"/>
+            <img src="~/uploads/@item.image" />
             <div class="card-title">
                 <h2>@item.Name</h2>
             </div>
@@ -22,6 +168,4 @@
             <a class="button-style" href="~/Booking/Index?destinationId=@item.id">Book Now</a>
         </div>
     }
-
-
 </div>
