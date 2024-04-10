@@ -5,7 +5,6 @@ using Microsoft.Data.SqlClient;
 
 namespace flight_management_system.Pages
 {
-    [Authorize]
     public class IndexModel : PageModel
     {
         public List<Destination> listDestinations = new List<Destination>();
@@ -27,7 +26,7 @@ namespace flight_management_system.Pages
                 using (SqlConnection con = new SqlConnection(conString))
                 {
                     con.Open();
-                    string sqlQuery = "SELECT A.name, A.image, A.location, F.destination_airport_id, COUNT(*) AS Visits " +
+                    string sqlQuery = "SELECT TOP 3 A.name, A.image, A.location, F.destination_airport_id, COUNT(*) AS Visits " +
                         "FROM booking B " +
                         "JOIN flight F ON B.flight_id = F.id " +
                         "JOIN airport A ON F.destination_airport_id = A.id " +
@@ -55,6 +54,12 @@ namespace flight_management_system.Pages
             {
                 Console.WriteLine("Exception: " + ex);
             }
+        }
+        public void OnPost()
+        {
+            String destination = Request.Form["destination"];
+
+            Response.Redirect("/Booking/Index?location=" + destination);
         }
         public class Destination
         {

@@ -45,7 +45,11 @@ namespace flight_management_system.Pages.Booking
                                 bookingInfo.Flight= reader.GetString(3);
                                 bookingInfo.FlightClass= reader.GetString(4);
                                 bookingInfo.trip = reader.GetString(5);
-                                bookingInfo.Agency= reader.GetString(6);
+                                if(!reader.IsDBNull(reader.GetOrdinal("agent_id")))
+                                {
+                                    bookingInfo.Agency = reader.GetString(6);
+                                }
+                                
                             }
                         }
                     }

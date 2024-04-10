@@ -46,8 +46,6 @@
                 var agencyClaim = User.FindFirst("agent");
                 string agencyValue = agencyClaim != null ? agencyClaim.Value : "";
 
-                <span> is Authenticated and agency is @agencyValue</span>
-
                 <div class="form-group">
                     <input type="hidden" name="agency" value="@agencyValue" />
 
@@ -55,7 +53,6 @@
             }
             else
             {
-                <span>is not Authenticated</span>
                 <div class="form-group">
                     <input type="hidden" name="agency" placeholder="For agencies only" value=""/>
 
