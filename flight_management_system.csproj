@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\slideshow\" />
+    <Folder Include="wwwroot\uploads\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
