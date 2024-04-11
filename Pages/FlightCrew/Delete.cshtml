@@ -1,0 +1,32 @@
+﻿@page
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@using Microsoft.Data.SqlClient
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@{
+    String id = Request.Query["id"];
+    Console.WriteLine(id);
+    try
+    {
+        string conString = Configuration.GetConnectionString("DefaultConnection");
+        using (SqlConnection con = new SqlConnection(conString))
+        {
+            con.Open();
+            string sqlQuery = "DELETE FROM FlightCrews WHERE id=@id";
+            using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
+            {
+                cmd.Parameters.AddWithValue("@id", id);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Error: " + ex.Message);
+    }
+    Response.Redirect("/FlightCrew/Index");
+
+}
+}
