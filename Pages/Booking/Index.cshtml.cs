@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using System.ComponentModel.DataAnnotations;
+using static flight_management_system.Pages.IndexModel;
 
 namespace flight_management_system.Pages.Booking
 {
@@ -13,6 +14,8 @@ namespace flight_management_system.Pages.Booking
 
         public string errorMessage = "";
         public string successMessage = "";
+      
+
         [BindProperty]
         public Search searchInfo { set; get; } = new Search();
         public IndexModel(IConfiguration configuration)
@@ -21,6 +24,9 @@ namespace flight_management_system.Pages.Booking
         }
         public void OnGet()
         {
+            string destinationId = Request.Query["destinationId"];
+            string location = Request.Query["location"];
+            
             if (!string.IsNullOrEmpty(Request.Query["departure"]) && !string.IsNullOrEmpty(Request.Query["destination"]))
             {
                 searchInfo.departure = DateTime.Parse(Request.Query["departure"]);
@@ -32,7 +38,18 @@ namespace flight_management_system.Pages.Booking
                 getFlights();
             }
 
+            if (!string.IsNullOrEmpty(destinationId))
+            {
+                getFlightsByDestination(destinationId);
+            }
+
+            if(!string.IsNullOrEmpty(location))
+            {
+                getFlightsByLocation(location);
+            }
+
             getDestinations();
+
         }
         public IActionResult OnPost()
         {
@@ -99,7 +116,90 @@ namespace flight_management_system.Pages.Booking
             }
         }
 
+        public IActionResult getFlightsByDestination(string destinationId)
+        {
+            try
+            {
+                string sqlConnection = _configuration.GetConnectionString("DefaultConnection");
+                using (SqlConnection con = new SqlConnection(sqlConnection))
+                {
+                    con.Open();
+                    string sqlQuery = "SELECT * FROM flight WHERE destination_airport_id = @destination";
+                    using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
+                    {
+                        cmd.Parameters.AddWithValue("@destination", destinationId);
 
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            listFlights.Clear();
+                            while (reader.Read())
+                            {
+                                Flight flight = new Flight();
+                                flight.Id = reader.GetString(0);
+                                flight.Departure = reader.GetDateTime(1);
+                                flight.Arrival = reader.GetDateTime(2);
+                                flight.Origin = reader.GetString(3);
+                                flight.Destination = reader.GetString(4);
+                                flight.Aircraft = reader.GetString(5);
+
+                                listFlights.Add(flight);
+                            }
+                        }
+                    }
+                }
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                errorMessage += ex.Message;
+                return Page();
+            }
+        }
+
+        public IActionResult getFlightsByLocation(string location)
+        {
+            try
+            {
+                string sqlConnection = _configuration.GetConnectionString("DefaultConnection");
+                using (SqlConnection con = new SqlConnection(sqlConnection))
+                {
+                    con.Open();
+                    string sqlQuery = "SELECT F.Id, F.departure, F.arrival, F.departure_airport_id, F.destination_airport_id, F.aircraft_id, A.location " +
+                        "FROM flight F " +
+                        "JOIN airport A ON F.destination_airport_id = A.id " +
+                        "WHERE A.location = @location ";
+                    using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
+                    {
+                        cmd.Parameters.AddWithValue("@location", location);
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            listFlights.Clear();
+                            while (reader.Read())
+                            {
+                                Flight flight = new Flight();
+                                flight.Id = reader.GetString(0);
+                                flight.Departure = reader.GetDateTime(1);
+                                flight.Arrival = reader.GetDateTime(2);
+                                flight.Origin = reader.GetString(3);
+                                flight.Destination = reader.GetString(4);
+                                flight.Aircraft = reader.GetString(5);
+
+                                listFlights.Add(flight);
+                            }
+                        }
+                    }
+                }
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                errorMessage += ex.Message;
+                return Page();
+            }
+        }
         private void getFlights()
         {
             listFlights.Clear();

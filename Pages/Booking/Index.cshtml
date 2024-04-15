@@ -6,7 +6,14 @@
     <img src="https://calaero.edu/wp-content/uploads/2023/08/iStock-1332501286-scaled.jpg" />
 </div>
 <div class="content-left">
+    <div class="manage-booking">
     <a class="button-style" href="/Booking/Index">Reload List</a>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a class="button-style" href="/Booking/Manage">Manage Booking</a>
+        <a class="button-style" href="/Booking/Report">Report</a>
+    }
+    </div>
     <div class="flight-search">
         <form method="get">            
             <div>

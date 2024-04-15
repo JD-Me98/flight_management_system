@@ -4,7 +4,63 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="slideshow-container">
+    <div class="mySlides fade">
+        <img src="~/slideshow/1.webp" style="width:100%; object-fit:cover">
+        <div class="text"><h1>"COME FLY WITH US!"</h1></div>
+    </div>
+    <div class="mySlides fade">
+        <img src="~/slideshow/2.webp" style="width:100%; object-fit:cover">
+        <div class="text">"Enjoy reliable flight schedules, ensuring you reach your destination on time."</div>
+    </div>
+    <div class="mySlides fade">
+        <img src="~/slideshow/3.webp" style="width:100%; object-fit:cover">
+        <div class="text">"Our user-friendly interface makes managing your bookings and preferences a breeze."</div>
+    </div>
+    <div class="mySlides fade">
+        <img src="~/slideshow/4.webp" style="width:100%; object-fit:cover">
+        <div class="text">"Our system ensures seamless booking, making travel planning effortless."</div>
+    </div>
+    <div class="mySlides fade">
+        <img src="~/slideshow/5.webp" style="width:100%; object-fit:cover">
+        <div class="text">"If you are too busy let our agents take care of your Booking."</div>
+    </div>
+
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</div>
+<div class="book-form">
+    <form method="post">
+        <input type="Text" placeholder="example: Kigali,Brussels" name="destination" value="" />
+        <button type="submit" class="button-style">Search Flight</button>
+    </form>
+</div>
+<br>
+
+<div style="text-align:center">
+    <di class="dots">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+    <span class="dot" onclick="currentSlide(4)"></span>
+    <span class="dot" onclick="currentSlide(5)"></span>
+    </di>
+</div>
+<div class="home-title">
+    <h1>Checkout Our Top Destinations!</h1>
+</div>
+<div class="card-holder">
+    @foreach (var item in Model.listDestinations)
+    {
+        <div class="img-card">
+            <img src="~/uploads/@item.image" />
+            <div class="card-title">
+                <h2>@item.Name</h2>
+            </div>
+            <div class="subtitle">
+                <span>@item.Location</span>
+            </div>
+            <a class="button-style" href="~/Booking/Index?destinationId=@item.id">Book Now</a>
+        </div>
+    }
 </div>

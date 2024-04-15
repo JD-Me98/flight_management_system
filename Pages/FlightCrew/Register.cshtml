@@ -38,7 +38,12 @@
 
             <div class="form-group">
                 <label>Role</label>
-                <input type="text" name="role" value="" />
+                <select name="role" value="">
+                    <option value="Pilot">Pilot</option>
+                    <option value="Co-pilot">Cop-pilot</option>
+                    <option value="Engineer">Engineer</option>
+                    <option value="Attendant">Attendant</option>
+                </select>
             </div>
 
             @if (Model.successMessage.Length > 0)
