@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace flight_management_system.Pages.Booking
 {
@@ -11,8 +15,8 @@ namespace flight_management_system.Pages.Booking
         [BindProperty]
         public Booking bookingInfo { get; set; } = new Booking();
 
-        public String errorMessage = "";
-        public String successMessage = "";
+        public string errorMessage = "";
+        public string successMessage = "";
 
         public RegisterModel(IConfiguration configuration)
         {
@@ -51,7 +55,7 @@ namespace flight_management_system.Pages.Booking
                 Console.WriteLine("Exception: " + ex);
             }
         }
-        public void OnPost()
+        public IActionResult OnPost()
         {
             bookingInfo.Fullname = Request.Form["fullname"];
             bookingInfo.Email = Request.Form["email"];
@@ -60,11 +64,6 @@ namespace flight_management_system.Pages.Booking
             bookingInfo.trip = Request.Form["trip"];
             bookingInfo.Agency = Request.Form["agency"];
 
-            //if (!ModelState.IsValid)
-            //{
-            //    errorMessage = "provide all infromation please";
-            //    return;
-            //}
 
             try { 
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
@@ -99,9 +98,15 @@ namespace flight_management_system.Pages.Booking
             }catch(Exception ex)
             {
                 errorMessage = ex.Message;
-                return;
+                return Page();
             }
             successMessage = "Your flight has been booked!";
+
+            return RedirectToPage("/Booking/Report", new { fullname = bookingInfo.Fullname, 
+                email = bookingInfo.Email, 
+                flight = bookingInfo.Flight,
+                flightClass = bookingInfo.FlightClass,
+                trip = bookingInfo.trip});
         }
         public class Flight
         {
@@ -110,7 +115,7 @@ namespace flight_management_system.Pages.Booking
             public DateTime Arrival { get; set; }
             public string Origin { get; set; }
             public string Destination { get; set; }
-            public String Aircraft { get; set; }
+            public string Aircraft { get; set; }
         }
 
         public class Agencies

@@ -184,9 +184,10 @@ table {
 
 .head-img {
     width: 100%;
-    max-height: 100%;
+    max-height: 100vh;
     overflow: hidden;
-    position: absolute;
+    position: fixed;
+    z-index:-1;
     top: 0;
     left: 0;
 }
@@ -393,17 +394,23 @@ table {
     display:flex;
     gap:10px;
 }
+    .manage-booking form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 20px;
+    }
 
 /*About US*/
 .team{
     display:flex;
     flex-direction:column;
-    width:100%;
+    width:80%;
     padding:20px;
     border-radius:5px;
     background-color:#fff;
     box-shadow: 0px 0px 5px rgb(124, 124, 124, .3);
     gap:10px;
+    margin:auto;
 }
 
 .team h2{
@@ -432,3 +439,32 @@ table {
     align-items:center;
     text-decoration:none;
 }
+
+/*filtering*/
+.filter-inputs{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.filter-inputs .radios {
+    display: flex;
+    flex-direction:row;
+    gap:10px;
+}
+
+.paginationContainer {
+    margin-top:10px;
+    width: 100%;
+    background-color: rgba(242, 242, 242, 0.8);
+    padding:10px;
+}
+#prevPageBtn, #nextPageBtn{
+    background-color:#FFCB00;
+    width:100px;
+    border:none;
+    padding:5px;
+    cursor:pointer;
+}
+    #prevPageBtn:hover, #nextPageBtn:hover {
+        background-color: #ba9500;
+    }

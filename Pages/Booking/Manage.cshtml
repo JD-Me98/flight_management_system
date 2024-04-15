@@ -6,9 +6,47 @@
     <img src="https://calaero.edu/wp-content/uploads/2023/08/iStock-1332501286-scaled.jpg" />
 </div>
 <div class="content-left">
-    <a class="button-style" href="/Flight/Register"> + Register flights</a>
+    <div class="flight-search">
+        <form id="filterForm">
+            <div class="filter-inputs">
+                <input type="text" id="filterInput" placeholder="Enter filter criteria">
+                <div class="radios">
+                    <div>
+                        <input type="radio" class="column-radio" id="nameRadio" name="columnRadio" value="1" checked>
+                        <label for="nameRadio">Fullname</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="column-radio" id="emailRadio" name="columnRadio" value="2" >
+                        <label for="emailRadio">Email</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="column-radio" id="flightRadio" name="columnRadio" value="3" checked>
+                        <label for="flightRadio">Flight</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="column-radio" id="classRadio" name="columnRadio" value="4" >
+                        <label for="classRadio">Class</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="column-radio" id="tripRadio" name="columnRadio" value="5" >
+                        <label for="tripRadio">Trip</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="column-radio" id="agencyRadio" name="columnRadio" value="6" >
+                        <label for="agencyRadio">Agency</label>
+                    </div>
+                    <div>
+                        <input type="radio" class="column-radio" id="dateRadio" name="columnRadio" value="7" >
+                        <label for="dateRadio">Date</label>
+                    </div>
+                </div>                
+            </div>
+            
+            <button type="submit" class="button-style">Filter</button>
+        </form>
+    </div>
     <h2 class="color-white">List of Flights</h2>
-    <table class="styled-table">
+    <table id="dataTable" class="styled-table">
         <thead>
             <tr>
                 <th>Flight ID</th>
@@ -22,7 +60,7 @@
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tableBody">
             @foreach (var item in Model.listBookings)
             {
                 <tr>
@@ -42,4 +80,9 @@
             }
         </tbody>
     </table>
+    <div class="paginationContainer" id="paginationContainer">
+        <button id="prevPageBtn">Previous</button>
+        <span id="pageInfo"></span>
+        <button id="nextPageBtn">Next</button>
+    </div>
 </div>
