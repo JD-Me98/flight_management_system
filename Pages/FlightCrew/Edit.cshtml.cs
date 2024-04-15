@@ -205,7 +205,7 @@ namespace flight_management_system.Pages.FlightCrew
             public DateTime Arrival { get; set; }
             public string DepartureAirportId { get; set; }
             public string DestinationAirportId { get; set; }
-            public String AircraftId { get; set; }
+            public String AircraftId { get; set; }  
         }
 
 
