@@ -247,15 +247,16 @@ table {
 }
 
 /*Card css*/
-.img-card{
-    width:25%;
-    min-height:150px;
-    padding:10px;
-    display:flex;
-    gap:5px;
-    flex-direction:column;
-    border-radius:5px;
-    background-color:#fff;
+.img-card {
+    width: 25%;
+    min-height: 150px;
+    padding: 10px;
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: transform 0.3s ease-in-out;
 }
 .img-card img{
     width:100%;
@@ -468,3 +469,15 @@ table {
     #prevPageBtn:hover, #nextPageBtn:hover {
         background-color: #ba9500;
     }
+
+.img-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+.img-card:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+}
