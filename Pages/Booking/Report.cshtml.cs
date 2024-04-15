@@ -31,9 +31,15 @@ namespace flight_management_system.Pages.Booking
         {
             
             string outputPath = GetDownloadsFolderPath() + "/report.pdf";
-            string ticketPath = GetDownloadsFolderPath() + "/ticket.pdf";
-            printTicket(ticketPath, fullname, email, flight, flightClass, trip);
-            //GeneratePdfReport(outputPath);
+            string ticketPath = GetDownloadsFolderPath() + "/ticket-"+fullname+".pdf";
+            if (!string.IsNullOrEmpty(fullname))
+            {
+                printTicket(ticketPath, fullname, email, flight, flightClass, trip);
+            }
+            if (Request.Query["report"] != "" && User.Identity.IsAuthenticated)
+            {
+                GeneratePdfReport(outputPath);
+            }
             Console.WriteLine($"PDF report generated at: {outputPath}");
         }
 
@@ -66,11 +72,24 @@ namespace flight_management_system.Pages.Booking
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     con.Open();
-                    string query = "select * from booking B WHERE B.agent_id = @id " +
+                    string query = "";
+                    if (User.IsInRole("agent"))
+                    {
+                        query = "select * from booking B WHERE B.agent_id = @id " +
                         "AND created_at >= DATEADD(day, -30, GETDATE())";
+                    }
+                    else
+                    {
+                        query = "select * from booking B WHERE created_at >= DATEADD(day, -30, GETDATE())";//iyo ushaka kureba abantu bari hasi ya 30 days
+                    }
+                    
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
-                        cmd.Parameters.AddWithValue("@id", User.FindFirst("agent").Value);
+                        if (User.IsInRole("agent"))
+                        {
+                            cmd.Parameters.AddWithValue("@id", User.FindFirst("agent").Value);
+
+                        }
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
