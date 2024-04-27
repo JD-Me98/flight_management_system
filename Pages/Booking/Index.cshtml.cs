@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -14,7 +15,7 @@ namespace flight_management_system.Pages.Booking
 
         public string errorMessage = "";
         public string successMessage = "";
-      
+
 
         [BindProperty]
         public Search searchInfo { set; get; } = new Search();
@@ -26,11 +27,13 @@ namespace flight_management_system.Pages.Booking
         {
             string destinationId = Request.Query["destinationId"];
             string location = Request.Query["location"];
-            
-            if (!string.IsNullOrEmpty(Request.Query["departure"]) && !string.IsNullOrEmpty(Request.Query["destination"]))
+            string departureId = Request.Query["departureId"];
+
+            if (!string.IsNullOrEmpty(Request.Query["departure"]) && !string.IsNullOrEmpty(Request.Query["destination"]) && !string.IsNullOrEmpty(Request.Query["departurepoint"]))
             {
                 searchInfo.departure = DateTime.Parse(Request.Query["departure"]);
                 searchInfo.destination = Request.Query["destination"];
+                searchInfo.departurepoint = Request.Query["departurepoint"];
                 getSearchResults(searchInfo);
             }
             else
@@ -43,7 +46,7 @@ namespace flight_management_system.Pages.Booking
                 getFlightsByDestination(destinationId);
             }
 
-            if(!string.IsNullOrEmpty(location))
+            if (!string.IsNullOrEmpty(location))
             {
                 getFlightsByLocation(location);
             }
@@ -60,7 +63,7 @@ namespace flight_management_system.Pages.Booking
             }
             else
             {
-                errorMessage=searchInfo.destination;
+                errorMessage = searchInfo.destination;
                 getSearchResults(searchInfo);
                 return Page();
             }
@@ -82,11 +85,17 @@ namespace flight_management_system.Pages.Booking
                 using (SqlConnection con = new SqlConnection(sqlConnection))
                 {
                     con.Open();
-                    string sqlQuery = "SELECT * FROM flight WHERE CAST(departure AS DATE) = @date AND destination_airport_id = @destination";
+                    string sqlQuery = @"
+                SELECT F.Id, F.departure, F.arrival, F.departure_airport_id, F.destination_airport_id, F.aircraft_id, 
+                       O.Name AS OriginName, D.Name AS DestinationName
+                FROM flight F
+                JOIN airport O ON F.departure_airport_id = O.Id
+                JOIN airport D ON F.destination_airport_id = D.Id  WHERE CAST(departure AS DATE) = @date AND destination_airport_id = @destination AND departure_airport_id =@departurepoint";
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@date", searchInfo.departure);
                         cmd.Parameters.AddWithValue("@destination", searchInfo.destination);
+                        cmd.Parameters.AddWithValue("@departurepoint", searchInfo.departurepoint);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
@@ -100,6 +109,9 @@ namespace flight_management_system.Pages.Booking
                                 flight.Origin = reader.GetString(3);
                                 flight.Destination = reader.GetString(4);
                                 flight.Aircraft = reader.GetString(5);
+
+                                flight.OriginName = reader.GetString(6);
+                                flight.DestinationName = reader.GetString(7);
 
                                 listFlights.Add(flight);
                             }
@@ -142,6 +154,9 @@ namespace flight_management_system.Pages.Booking
                                 flight.Destination = reader.GetString(4);
                                 flight.Aircraft = reader.GetString(5);
 
+                                flight.OriginName = reader.GetString(6);
+                                flight.DestinationName = reader.GetString(7);
+
                                 listFlights.Add(flight);
                             }
                         }
@@ -165,10 +180,13 @@ namespace flight_management_system.Pages.Booking
                 using (SqlConnection con = new SqlConnection(sqlConnection))
                 {
                     con.Open();
-                    string sqlQuery = "SELECT F.Id, F.departure, F.arrival, F.departure_airport_id, F.destination_airport_id, F.aircraft_id, A.location " +
-                        "FROM flight F " +
-                        "JOIN airport A ON F.destination_airport_id = A.id " +
-                        "WHERE A.location = @location ";
+                    string sqlQuery = @"
+                SELECT F.Id, F.departure, F.arrival, F.departure_airport_id, F.destination_airport_id, F.aircraft_id, 
+                       O.Name AS OriginName, D.Name AS DestinationName
+                FROM flight F
+                JOIN airport O ON F.departure_airport_id = O.Id
+                JOIN airport D ON F.destination_airport_id = D.Id
+                    WHERE A.location = @location ";
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@location", location);
@@ -185,6 +203,9 @@ namespace flight_management_system.Pages.Booking
                                 flight.Origin = reader.GetString(3);
                                 flight.Destination = reader.GetString(4);
                                 flight.Aircraft = reader.GetString(5);
+
+                                flight.OriginName = reader.GetString(6);
+                                flight.DestinationName = reader.GetString(7);
 
                                 listFlights.Add(flight);
                             }
@@ -209,7 +230,12 @@ namespace flight_management_system.Pages.Booking
                 using (SqlConnection con = new SqlConnection(conString))
                 {
                     con.Open();
-                    string sqlQuery = "SELECT * FROM flight;";
+                    string sqlQuery = @"
+                SELECT F.Id, F.departure, F.arrival, F.departure_airport_id, F.destination_airport_id, F.aircraft_id, 
+                       O.Name AS OriginName, D.Name AS DestinationName
+                FROM flight F
+                JOIN airport O ON F.departure_airport_id = O.Id
+                JOIN airport D ON F.destination_airport_id = D.Id;";
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                     {
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -223,6 +249,8 @@ namespace flight_management_system.Pages.Booking
                                 flight.Origin = reader.GetString(3);
                                 flight.Destination = reader.GetString(4);
                                 flight.Aircraft = reader.GetString(5);
+                               flight.OriginName = reader.GetString(6);
+                               flight.DestinationName = reader.GetString(7);
 
                                 listFlights.Add(flight);
                             }
@@ -278,6 +306,8 @@ namespace flight_management_system.Pages.Booking
             public DateTime Arrival { get; set; }
             public string Origin { get; set; }
             public string Destination { get; set; }
+            public string OriginName { get; set; }   
+            public string DestinationName { get; set; }
             public String Aircraft { get; set; }
         }
         public class Airport
@@ -290,11 +320,12 @@ namespace flight_management_system.Pages.Booking
         }
 
         public class Search
-        {
+        {                                                                            
             [Required(ErrorMessage = "Destination is required")]
             public DateTime departure { get; set; }
             [DataType(DataType.Date)]
             public string destination { get; set; }
+            public string departurepoint { get; set; }
         }
     }
 }
