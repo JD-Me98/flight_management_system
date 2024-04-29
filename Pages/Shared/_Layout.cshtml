@@ -37,7 +37,7 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                     {
-                        @if (User.IsInRole("system admin"))
+                        @if (User.IsInRole("admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" href="/Airport/Index">Airport</a>

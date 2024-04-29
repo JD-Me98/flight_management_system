@@ -23,8 +23,10 @@ namespace flight_management_system.Pages.Booking
         }
         public void OnGet(string fullname, string email, string flight, string flightClass, string trip)
         {
-            
-            string outputPath = GetDownloadsFolderPath() + "/report.pdf";
+            DateTime currentDateAndTime = DateTime.Now;
+            string datecurrent = currentDateAndTime.ToString("yyyy-MM-dd HHmmss");
+
+            string outputPath = GetDownloadsFolderPath() + "/report"+ datecurrent + ".pdf";
             string ticketPath = GetDownloadsFolderPath() + "/ticket-"+fullname+".pdf";
             if (!string.IsNullOrEmpty(fullname))
             {
