@@ -20,7 +20,15 @@
                 <label>departure date</label>
                 <input type="datetime" name="departure" value="" placeholder="YYYY-MM-DD" />
             </div>
-            
+            <div>
+                <label>From</label>
+                <select name="origin" value="">
+                    @foreach (var item in Model.listAirport)
+                    {
+                        <option value="@item.Id.Trim()">@item.Name</option>
+                    }
+                </select>
+            </div>
             <div>
                 <label>Destination</label>
                 <select name="destination" value="">
@@ -54,6 +62,7 @@
                 <th>Origin</th>
                 <th>Destination</th>
                 <th>Aircraft</th>
+                <th>Price</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -64,8 +73,9 @@
                     <td>@item.Departure</td>
                     <td>@item.Arrival</td>
                     <td>@item.Origin</td>
-                    <td>@item.Destination</td>
+                    <td>@item.Destination</td>                    
                     <td>@item.Aircraft</td>
+                    <td>$ @item.Price</td>
                     <td>
                         <a class="book-btn" href="/Booking/Register?id=@item.Id">Book Flight</a>
                     </td>

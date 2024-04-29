@@ -2,17 +2,11 @@ using iText.Kernel.Pdf;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using iText.Layout;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using System.Xml.Linq;
 using iText.Layout.Borders;
-using System.Security.Cryptography.Xml;
-using System.Reflection.PortableExecutable;
-using Newtonsoft.Json;
-using System.Web;
+using iText.IO.Image;
+using iText.Kernel.Colors;
 
 
 namespace flight_management_system.Pages.Booking
@@ -59,7 +53,7 @@ namespace flight_management_system.Pages.Booking
                 float[] colWidth = { col, col };
 
                 Table table = new Table(colWidth);
-
+                table.UseAllAvailableWidth();
                 DateTime currentDateAndTime = DateTime.Now;
 
                 Cell cell1 = new Cell(1, 1)
@@ -151,44 +145,153 @@ namespace flight_management_system.Pages.Booking
 
         public void printTicket(string Path, string fullname, string email, string flight, string flightClass, string trip)
         {
-            
+            Ticket ticket = new Ticket();
+
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                string query = "select ao.location as 'from', ad.location as 'to', " +
+                    "CONVERT(varchar(10), f.departure, 101) as 'date', " +
+                    "CONVERT(varchar(8), DATEADD(minute, -30, f.departure), 108) as 'boarding' from flight f " +
+                    "JOIN airport ao on ao.id = f.departure_airport_id " +
+                    "JOIN airport ad on ad.id = f.destination_airport_id " +
+                    "where f.id=@id";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    
+                        cmd.Parameters.AddWithValue("@id", flight);
+                    
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        listBooking.Clear();
+                        if (reader.Read())
+                        {                            
+                            ticket.from = reader.GetString(reader.GetOrdinal("from"));
+                            ticket.to = reader.GetString(reader.GetOrdinal("to"));
+                            ticket.Boarding = reader.GetString(reader.GetOrdinal("boarding"));
+                            ticket.FlightDate = reader.GetString(reader.GetOrdinal("date"));
+                        }
+                    }
+                }
+            }
+
             using (PdfWriter writer = new PdfWriter(Path))
             using (PdfDocument pdfDoc = new PdfDocument(writer))
             using (Document document = new Document(pdfDoc))
             {
                 Paragraph heading = new Paragraph("Flight Ticket").SetTextAlignment(TextAlignment.CENTER)
                    .SetFontSize(25);
-                document.Add(heading);
+                
+                string logoPath = "wwwroot/images/logo-no-background.png";
 
-                float col = 3000f;
-                float[] colWidth = { col, col };
+                Image logo = new Image(ImageDataFactory.Create(logoPath));
+                logo.SetWidth(70);
+                
 
-                float totalWidth = 600f;
+                Table header = new Table(2);
+                header.UseAllAvailableWidth();
+                DeviceRgb customColor = new DeviceRgb(255, 203, 0);
+                header.SetBackgroundColor(customColor);
 
-                Table table = new Table(new float[] { totalWidth / 2f, totalWidth / 2f });
+                Cell cellLogo = new Cell().Add(logo).SetBorder(Border.NO_BORDER);
+                Cell title = new Cell().Add(heading).SetBorder(Border.NO_BORDER); 
+
+                header.AddCell(cellLogo);
+                header.AddCell(title);
+
+                document.Add(header);
+
+                float col = 150f;
+                float[] colWidth = { col, col , col };
+
+                float totalWidth = 550f;
+
+                Table table = new Table(3);
+                table.UseAllAvailableWidth();
+                Table FromTo = new Table(3);
+                Table last = new Table(3);
+                last.UseAllAvailableWidth();
 
                 // Create Paragraph instances for each piece of information
-                Paragraph name = new Paragraph("Name: " + fullname).SetFontSize(14);
-                Paragraph Email = new Paragraph("Email: " + email).SetFontSize(14);
-                Paragraph Flight = new Paragraph("Flight: " + flight).SetFontSize(14);
-                Paragraph FlightClass = new Paragraph("Class: " + flightClass).SetFontSize(14);
-                Paragraph Trip = new Paragraph("Trip: " + trip).SetFontSize(14);
+                Paragraph name = new Paragraph(fullname).SetFontSize(11).SetBold();
+                Paragraph Flight = new Paragraph(flight).SetFontSize(11).SetBold();
+                Paragraph FlightClass = new Paragraph(flightClass).SetFontSize(11).SetBold();
+                Paragraph origin = new Paragraph(ticket.from).SetFontSize(24).SetBold();
+                Paragraph destination = new Paragraph(ticket.to).SetFontSize(24).SetBold();
+                Paragraph boarding = new Paragraph(ticket.Boarding.ToString()).SetFontSize(11).SetBold();
+                Paragraph flightDate = new Paragraph(ticket.FlightDate.ToString()).SetFontSize(11).SetBold();
 
                 // Create cells and add them to the table
-                Cell cell1 = new Cell().Add(name).SetBorder(Border.NO_BORDER);
-                Cell cell2 = new Cell(1, 2).Add(Email).SetBorder(Border.NO_BORDER);
-                Cell cell3 = new Cell().Add(Flight).SetBorder(Border.NO_BORDER);
-                Cell cell4 = new Cell().Add(FlightClass).SetBorder(Border.NO_BORDER);
-                Cell cell5 = new Cell(1, 2).Add(Trip).SetBorder(Border.NO_BORDER);
+                Cell cellName = new Cell().Add(new Paragraph("PASSENGER").SetFontSize(11)).SetBorder(Border.NO_BORDER); ;
+                Cell cellFlight = new Cell().Add(new Paragraph("FLIGHT").SetFontSize(11)).SetBorder(Border.NO_BORDER); ;
+                Cell cellDate = new Cell().Add(new Paragraph("DATE").SetFontSize(11)).SetBorder(Border.NO_BORDER); ;
 
+                table.AddCell(cellName);
+                table.AddCell(cellFlight);
+                table.AddCell(cellDate);
+
+                Cell cell1 = new Cell().Add(name).SetBorder(Border.NO_BORDER); ;                
+                Cell cell2 = new Cell().Add(Flight).SetBorder(Border.NO_BORDER); ;                
+                Cell cell3 = new Cell().Add(flightDate).SetBorder(Border.NO_BORDER); ;
+                
                 table.AddCell(cell1);
-                table.AddCell(cell2);
+                table.AddCell(cell2);                                                
                 table.AddCell(cell3);
-                table.AddCell(cell4);
-                table.AddCell(cell5);
 
                 // Add the table to the document
                 document.Add(table);
+
+                //From To
+                Cell emptyleft = new Cell().Add(new Paragraph("            ")).SetBorder(Border.NO_BORDER); ;
+                string fPath = ticket.from.Trim() + " to " + ticket.to.Trim();
+                Cell cellFrom = new Cell().Add(new Paragraph(fPath)).SetFontSize(32).SetBorder(Border.NO_BORDER).SetHorizontalAlignment(HorizontalAlignment.CENTER);
+                Cell emptyRight = new Cell().Add(new Paragraph("           ")).SetBorder(Border.NO_BORDER); ;
+
+                FromTo.AddCell(emptyleft);
+                FromTo.AddCell(cellFrom);
+                FromTo.AddCell(emptyRight);
+
+                document.Add(FromTo);
+
+                //footer
+                Cell cellClass = new Cell().Add(new Paragraph("CLASS")).SetFontSize(11).SetBorder(Border.NO_BORDER);
+                Cell cellBoarding = new Cell().Add(new Paragraph("BOARDING")).SetFontSize(11).SetBorder(Border.NO_BORDER);
+                Cell cellNull = new Cell().Add(new Paragraph("")).SetBorder(Border.NO_BORDER);
+
+                last.AddCell(cellClass);
+                last.AddCell(cellBoarding);
+                last.AddCell(cellNull);
+
+                Cell cell5 = new Cell().Add(FlightClass).SetBorder(Border.NO_BORDER);                
+                Cell cell6 = new Cell().Add(boarding).SetBorder(Border.NO_BORDER);
+                
+                string imagePath = "wwwroot/images/barcode.gif";
+
+                Image barcode = new Image(ImageDataFactory.Create(imagePath));
+                barcode.SetWidth(150);
+
+                Cell cell7 = new Cell().Add(barcode).SetBorder(Border.NO_BORDER);
+                                
+                last.AddCell(cell5);                
+                last.AddCell(cell6);
+                last.AddCell(cell7);
+
+                document.Add(last);
+
+                Table footer = new Table(1);
+                footer.UseAllAvailableWidth();
+
+                //DeviceRgb footerColor = new DeviceRgb(255, 203, 0);
+                footer.SetBackgroundColor(customColor);
+
+                Cell copyright = new Cell().Add(new Paragraph("Copyright 2024 Intore Flights.").SetFontSize(11)).SetBorder(Border.NO_BORDER);
+
+                footer.AddCell(copyright);
+
+                document.Add(footer);
 
                 // Close the document
                 document.Close();
@@ -228,6 +331,15 @@ namespace flight_management_system.Pages.Booking
             public string FlightClass { get; set; }
             public string trip { get; set; }
             public string Agency { get; set; }
+        }
+
+        public class Ticket
+        {
+            public string from { get; set; }
+            public string to { get; set; }
+            public string Boarding { get; set; }
+
+            public string FlightDate { get; set; }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace flight_management_system.Pages.Flight
     {
         private readonly IConfiguration _configuration;
         public List<Flight> listFlights = new List<Flight>();
-
+        public string errorMessage = "";
         public IndexModel(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -24,7 +24,7 @@ namespace flight_management_system.Pages.Flight
                 using (SqlConnection con = new SqlConnection(conString))
                 {
                     con.Open();
-                    string sqlQuery = "SELECT * FROM flight;";
+                    string sqlQuery = "SELECT * FROM flight";
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                     {
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -32,13 +32,14 @@ namespace flight_management_system.Pages.Flight
                             while (reader.Read())
                             {
                                 Flight flight = new Flight();
-                                flight.Id = reader.GetString(0);
-                                flight.Departure = reader.GetDateTime(1);
-                                flight.Arrival = reader.GetDateTime(2);
-                                flight.Origin = reader.GetString(3);
-                                flight.Destination = reader.GetString(4);
-                                flight.Aircraft = reader.GetString(5);
-                                    
+                                flight.Id = reader.GetString(reader.GetOrdinal("id"));
+                                flight.Departure = reader.GetDateTime(reader.GetOrdinal("departure"));
+                                flight.Arrival = reader.GetDateTime(reader.GetOrdinal("arrival"));
+                                flight.Origin = reader.GetString(reader.GetOrdinal("departure_airport_id"));
+                                flight.Destination = reader.GetString(reader.GetOrdinal("destination_airport_id"));
+                                flight.Aircraft = reader.GetString(reader.GetOrdinal("aircraft_id"));
+                                flight.Price = reader.GetDouble(reader.GetOrdinal("price"));
+
                                 listFlights.Add(flight);
                             }
                         }
@@ -47,7 +48,8 @@ namespace flight_management_system.Pages.Flight
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception: " + ex);
+                errorMessage = ex.Message;
+                Console.WriteLine(ex.ToString());
             }
         }
 
@@ -60,6 +62,7 @@ namespace flight_management_system.Pages.Flight
             public string Origin { get; set; }
             public string Destination { get; set; }
             public String Aircraft { get; set; }
+            public double Price { get; set; }
         }
     }
 }

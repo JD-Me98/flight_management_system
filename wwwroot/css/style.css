@@ -38,6 +38,9 @@ header{
     align-items: center;
     margin:0;
 }
+.main-logo{
+    width:200px;
+}
 .navbar{
     background-color: #000;
     width: 100%;
@@ -480,4 +483,12 @@ table {
 .img-card:hover {
     transform: scale(1.1);
     transition: transform 0.3s ease-in-out;
+}
+.same-line{
+    display:flex;
+    flex-direction: row;
+    justify-content:space-around;
+}
+.same-line div{
+    text-align:center;
 }
