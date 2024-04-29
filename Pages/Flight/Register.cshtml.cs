@@ -37,7 +37,7 @@ namespace flight_management_system.Pages.Flight
             flightInfo.Origin = Request.Form["origin"];
             flightInfo.Destination = Request.Form["destination"];
             flightInfo.Aircraft = Request.Form["aircraft"];
-
+            flightInfo.Price = float.Parse(Request.Form["price"]);
             if(flightInfo.Id == "")
             {
                 errorMessage = "Provide all details";
@@ -50,7 +50,7 @@ namespace flight_management_system.Pages.Flight
                 using (SqlConnection con = new SqlConnection(conString))
                 {
                     con.Open();
-                    string sqlQuery = "INSERT INTO flight values(@id, @departure, @arrival, @origin, @destination, @aircraft)";
+                    string sqlQuery = "INSERT INTO flight values(@id, @departure, @arrival, @origin, @destination, @aircraft, @price)";
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                     {
                         Aircrafts aircraft = new Aircrafts();
@@ -60,7 +60,7 @@ namespace flight_management_system.Pages.Flight
                         cmd.Parameters.AddWithValue("@origin", flightInfo.Origin);
                         cmd.Parameters.AddWithValue("@destination", flightInfo.Destination);
                         cmd.Parameters.AddWithValue("@aircraft", flightInfo.Aircraft);
-
+                        cmd.Parameters.AddWithValue("@Price", flightInfo.Price);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -148,6 +148,7 @@ namespace flight_management_system.Pages.Flight
             public string Origin { get; set; }
             public string Destination { get; set; }
             public String Aircraft { get; set; }
+            public float Price { get; set ;}
         }
 
         public class Airports

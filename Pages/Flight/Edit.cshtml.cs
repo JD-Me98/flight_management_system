@@ -49,6 +49,8 @@ namespace flight_management_system.Pages.Flight
                                 flightInfo.Origin = reader.GetString(3);
                                 flightInfo.Destination = reader.GetString(4);
                                 flightInfo.Aircraft = reader.GetString(5);
+                                flightInfo.Price = reader.GetDouble(6);                               
+                                
                             }
                         }
                     }
@@ -69,6 +71,7 @@ namespace flight_management_system.Pages.Flight
             flightInfo.Origin = Request.Form["origin"];
             flightInfo.Destination = Request.Form["destination"];
             flightInfo.Aircraft = Request.Form["aircraft"];
+            flightInfo.Price = float.Parse(Request.Form["price"]);
 
             if (flightInfo.Id == "")
             {
@@ -82,7 +85,7 @@ namespace flight_management_system.Pages.Flight
                 using (SqlConnection con = new SqlConnection(conString))
                 {
                     con.Open();
-                    string sqlQuery = "UPDATE flight SET departure=@departure, arrival=@arrival, departure_airport_id=@origin, destination_airport_id=@destination, aircraft_id=@aircraft WHERE id=@id";
+                    string sqlQuery = "UPDATE flight SET departure=@departure, arrival=@arrival, departure_airport_id=@origin, destination_airport_id=@destination, aircraft_id=@aircraft, price=@price WHERE id=@id";
                     using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                     {
                         cmd.Parameters.AddWithValue("@id", flightInfo.Id);
@@ -91,6 +94,7 @@ namespace flight_management_system.Pages.Flight
                         cmd.Parameters.AddWithValue("@origin", flightInfo.Origin);
                         cmd.Parameters.AddWithValue("@destination", flightInfo.Destination);
                         cmd.Parameters.AddWithValue("@aircraft", flightInfo.Aircraft);
+                        cmd.Parameters.AddWithValue("@price", flightInfo.Price);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         if (rowsAffected > 0)
@@ -191,6 +195,7 @@ namespace flight_management_system.Pages.Flight
             public string Origin { get; set; }
             public string Destination { get; set; }
             public String Aircraft { get; set; }
+            public double Price { get; set; }
         }
 
         public class Airports

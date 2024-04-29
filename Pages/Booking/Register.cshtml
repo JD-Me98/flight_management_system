@@ -33,12 +33,16 @@
                 <option value="First Class">First Class</option>
             </select>
             </div>
-            <div class="form-group">
-                <label>Trip:</label>
-                <label for="round">Round trip</label>
-                <input type="radio" name="trip" id="round" value="Round" />
-                <label for="round">One-way trip</label>
-                <input type="radio" name="trip" id="oneway" value="One-Way" />
+            <div class="form-group same-line">
+                <div>
+                    <label for="round">Round trip</label>
+                    <input type="radio" name="trip" id="round" value="Round" />
+                </div>
+                <div>
+                    <label for="round">One-way trip</label>
+                    <input type="radio" name="trip" id="oneway" value="One-Way" />
+                </div>
+                
             </div>
             @if (User.Identity.IsAuthenticated && User.IsInRole("agent"))
             {

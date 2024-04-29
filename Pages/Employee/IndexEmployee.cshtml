@@ -16,8 +16,7 @@
                 <th>Employee Id</th>
                 <th>Employee Fullnames</th>
                 <th>Employee Date of Birth</th>
-                <th>Employee Position</th>
-                <th>Availability</th>
+                <th>Employee Position</th>                
                 <th>Action</th>
             </tr>
         </thead>
@@ -29,7 +28,6 @@
                     <td>@item.Fullname</td>
                     <td>@item.DateOfBirth</td>
                     <td>@item.Position</td>
-                    <td>@item.Availability</td>
                     <td>
                         <a class="edit-btn" href="/Employee/Edit?id=@item.Id">Edit</a>
                         <a class="delete-btn" href="/Employee/DeleteEmployee?id=@item.Id" onclick="return confirm('Are you sure you want to delete this airport?')">Delete</a>

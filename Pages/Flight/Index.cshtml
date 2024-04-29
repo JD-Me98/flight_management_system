@@ -19,12 +19,14 @@
                 <th>Origin</th>
                 <th>Destination</th>
                 <th>Aircraft</th>
+                <th>Price</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.listFlights)
             {
+                
                 <tr>
                     <td>@item.Id</td>
                     <td>@item.Departure</td>
@@ -32,6 +34,7 @@
                     <td>@item.Origin</td>
                     <td>@item.Destination</td>
                     <td>@item.Aircraft</td>
+                    <td>$@item.Price</td>
                     <td>
                         <a class="edit-btn" href="/Flight/Edit?id=@item.Id">Edit</a>
                         <a class="delete-btn" href="/Flight/Delete?id=@item.Id" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
@@ -40,4 +43,9 @@
             }
         </tbody>
     </table>
+    @if(Model.errorMessage.Length > 0)
+    {
+        <span>@Model.errorMessage</span>
+    }
+    
 </div>

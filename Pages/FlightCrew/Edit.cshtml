@@ -1,0 +1,52 @@
+﻿@page
+@model flight_management_system.Pages.FlightCrew.EditModel
+@{
+}
+
+<div class="page-section">
+    <div class="form-container">
+        @if (Model.errorMessage.Length > 0)
+        {
+            <div id="Message" class="errorMessage">
+                <p><strong>Error:</strong> @Model.errorMessage</p>
+                <span class="close-btn" onclick="dismissError()">×</span>
+            </div>
+        }
+        <form method="post">
+            <h2 class="poppins-regular">Edit Flight Crew</h2>
+            <div class="form-group">
+                <label>Flight Crew Id:</label>
+                <input type="text" name="id" value="@Model.flightCrewInfo.Id" readonly />
+            </div>
+            <div class="form-group">
+                <label>Employee:</label>
+                <input type="text" name="employee" value="@Model.flightCrewInfo.Employee" readonly />
+            </div>
+            <div class="form-group">
+                <label>Flight:</label>
+                <select name="flight">
+                    @foreach (var flight in Model.listFlight)
+                    {
+                        <option value="@flight.Id" selected="@(flight.Id == Model.flightCrewInfo.Flight)">
+                            @flight.Id
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Role:</label>
+                <input type="text" name="role" value="@Model.flightCrewInfo.Role" />
+            </div>
+            @if (Model.successMessage.Length > 0)
+            {
+                <div id="Message" class="successMessage">
+                    <p>@Model.successMessage</p>
+                    <span class="close-btn" onclick="dismissError()">×</span>
+                </div>
+            }
+            <div class="form-group">
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
